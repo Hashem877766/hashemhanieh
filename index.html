@@ -3,154 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المراقب - الكيان الرقمي</title>
+    <title>هاشم | المطور المحترف</title>
     <style>
+        :root {
+            --bg-color: #060913;
+            --card-bg: #0f1322;
+            --neon-blue: #00f2ff;
+            --neon-purple: #a100ff;
+            --text-color: #ffffff;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background-color: #0a0f1d;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* خلفية جزيئات متحركة خفيفة */
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(161, 0, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            animation: rotateBg 20s infinite linear;
+        }
+
+        /* الجزء العلوي (الهيدر) */
+        header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        /* عنصر الكاميرا الحقيقية في الخلفية */
-        #webcamVideo {
-            position: absolute;
+            padding: 20px 8%;
+            background: rgba(6, 9, 19, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 84%;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.15;
-            z-index: 1;
-            transform: scaleX(-1); /* قلب الكاميرا كالمرآة */
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* وضع الدم والرعب الكامل عند الرفض */
-        body.blood-active {
-            background-color: #2b0000 !important;
-            background-image: radial-gradient(circle, #660000 20%, #110000 90%) !important;
-        }
-        body.blood-active #webcamVideo {
-            opacity: 0.05;
-            filter: sepia(1) saturate(5) hue-rotate(-50deg);
-        }
-
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 90%;
-            max-width: 500px;
-            z-index: 10;
-        }
-
-        /* شاشة مراقبة عين البوت */
-        .viewport-box {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 4px solid #00d2ff;
-            box-shadow: 0 0 20px #00d2ff;
-            overflow: hidden;
-            background: #111625;
-            transition: all 0.3s ease;
-        }
-
-        body.blood-active .viewport-box {
-            border-color: #ff0000;
-            box-shadow: 0 0 35px #ff0000;
-            animation: shake 0.1s infinite;
-        }
-
-        /* عين البوت المتحركة */
-        .bot-eye {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, #00d2ff 30%, #006688 80%);
-            border-radius: 50%;
-            top: 35%;
-            left: 35%;
-            box-shadow: 0 0 15px #00d2ff;
-            transition: transform 0.1s linear, background 0.3s ease;
-        }
-
-        body.blood-active .bot-eye {
-            background: radial-gradient(circle, #ff0000 20%, #550000 80%) !important;
-            box-shadow: 0 0 30px #ff0000 !important;
-            width: 80px;
-            height: 15px;
-            border-radius: 4px;
-            top: 45%;
-            left: 30%;
-        }
-
-        /* سيلان الدم من الأعلى */
-        .blood-drip {
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(139,0,0,0.9) 60%, transparent);
-            transition: top 0.6s ease-in-out;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        body.blood-active .blood-drip {
-            top: 0;
-        }
-
-        /* صندوق الحوار والخيارات */
-        .dialogue-box {
-            background: rgba(20, 27, 45, 0.85);
-            border: 1px solid #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            width: 100%;
-            box-sizing: border-box;
-            text-align: center;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        body.blood-active .dialogue-box {
-            background: rgba(40, 0, 0, 0.95);
-            border-color: #ff0000;
-            color: #ffcccc;
-            box-shadow: 0 0 20px rgba(255,0,0,0.2);
-        }
-
-        .bot-text {
-            font-size: 18px;
+        .logo {
+            font-size: 24px;
             font-weight: bold;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+        }
+
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        /* القسم الرئيسي (البطل) */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* الأزرار المتحركة */
+        .cta-btn {
+            margin-top: 30px;
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+
+        .cta-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 25px var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        /* قسم المشاريع */
+        .container {
+            padding: 80px 8%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 242, 255, 0.03));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(161, 0, 255, 0.15);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
             margin-bottom: 15px;
         }
 
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .project-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            color: #fff;
         }
 
-        .option-btn {
-            background: #1e293b;
-            color: white;
-            border: 1px solid #334155;
-            padding: 10px;
-            border-
+        .project-card p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
 
+        /* قسم المهارات التقنية */
+        .skills-section {
+            background: #090e1a;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .skill-box {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .skill-box:hover {
+            border-bottom-color: var(--neon-blue);
+            background: #0f1424;
+            transform: scale(1.03);
+        }
+
+        .skill-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* تذييل الصفحة */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* أنيميشن الدوران للخلفية */
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* الهواتف والتابلت */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.2rem; }
+            header { width: 90%; padding: 15px 5%; }
+            nav { display: none; } /* إخفاء القائمة العادية في الشاشات الصغيرة لتوفير مساحة */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <header>
+        <div class="logo">HASHEM //</div>
+        <nav>
+            <a href="#hero">الرئيسية</a>
+            <a href="#projects">المشاريع</a>
+            <a href="#skills">المهارات</a>
+        </nav>
+    </header>
+
+    <section class="hero-section" id="hero">
+        <h1 class="hero-title">مرحباً، أنا <span>هاشم</span></h1>
+        <p class="hero-subtitle">مصمم ومطور برمجيات مستقل. أقوم ببناء أنظمة برمجية متطورة، ألعاب تفاعلية، وخوادم مجتمعية متكاملة بأحدث التقنيات الرقمية.</p>
+        <button class="cta-btn" onclick="document.getElementById('projects').scrollIntoView();">استكشف مشاريعي ⚡</button>
+    </section>
+
+    <section class="container" id="projects">
+        <h2 class="section-title">المشاريع الإبداعية</h2>
+        <div class="projects-grid">
+            
+            <div class="project-card">
+                <div class="project-icon">🎮</div>
+                <h3>محاكاة ألعاب 3D</h3>
+                <p>تطوير تجارب وألعاب تفاعلية ثلاثية الأبعاد مبنية بالكامل على لغات الويب الأساسية وتقنيات المحاكاة الحركية المتطورة.</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🤖</div>
+                <h3>أنظمة بوتات متكاملة</h3>
+                <p>برمجة وتصميم أنظمة برمجية مخصصة لإدارة العمليات الافتراضية، المتاجر الرقمية، والعملات الرقمية التنافسية داخل السيرفرات.</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">👑</div>
+                <h3>هندسة مجتمعات رقمية</h3>
+                <p>بناء وتأسيس خوادم محادثة ضخمة ذات طابع إمبراطوري فاخر (أسود وذهبي)، مجهزة بهياكل قنوات وصلاحيات معقدة ومحمية.</p>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">📜</div>
+                <h3>سكربتات وتعديل بيئات اللعب</h3>
+                <p>كتابة نصوص برمجية مخصصة (Scripts) لتعديل الميكانيكيات، وبناء أدوات المساعدة التلقائية وعناصر التحكم في محركات الألعاب الشهيرة.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="skills-section container" id="skills">
+        <h2 class="section-title">الترسانة البرمجية</h2>
+        <div class="skills-grid">
+            
+            <div class="skill-box">
+                <div style="color: #3776AB; font-size: 2rem;">🐍</div>
+                <div class="skill-name">Python</div>
+            </div>
+
+            <div class="skill-box">
+                <div style="color: #F7DF1E; font-size: 2rem;">🟨</div>
+                <div class="skill-name">JavaScript</div>
+            </div>
+
+            <div class="skill-box">
+                <div style="color: #00A2FF; font-size: 2rem;">🔵</div>
+                <div class="skill-name">Luau / Roblox</div>
+            </div>
+
+            <div class="skill-box">
+                <div style="color: #E34F26; font-size: 2rem;">🌐</div>
+                <div class="skill-name">HTML & CSS</div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 هاشم. جميع الحقوق البرمجية محفوظة تم البناء بواسطة شغف التطوير الفني.</p>
+    </footer>
+
+</body>
+</html>
