@@ -3,37 +3,496 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هاشم | المطور المحترف</title>
+    <title>HASHEM // ARCHITECT CORE</title>
     <style>
         :root {
-            --bg-color: #060913;
-            --card-bg: #0f1322;
-            --neon-blue: #00f2ff;
-            --neon-purple: #a100ff;
-            --text-color: #ffffff;
+            --dark-core: #030712;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --neon-cyan: #00f2ff;
+            --neon-magenta: #ff007f;
+            --neon-green: #39ff14;
+            --border-glow: rgba(0, 242, 255, 0.15);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-core);
+            color: var(--text-primary);
+            font-family: 'Courier New', Courier, monospace, 'Segoe UI', Tahoma;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        /* خلفية جزيئات متحركة خفيفة */
-        .bg-glow {
+        /* الإطار الخارجي والشبكة الرقمية للموقع */
+        .cyber-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        /* القائمة الجانبية المستوحاة من خوادم التحكم */
+        .sidebar {
+            background: rgba(10, 15, 30, 0.95);
+            border-left: 2px solid var(--neon-cyan);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 5px 0 25px rgba(0, 242, 255, 0.1);
+            z-index: 10;
+        }
+
+        .identity-core {
+            text-align: center;
+            border-bottom: 1px dashed rgba(0, 242, 255, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .avatar-frame {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px double var(--neon-magenta);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: rgba(255, 0, 127, 0.05);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.2);
+        }
+
+        .identity-core h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .identity-core span {
+            font-size: 11px;
+            color: var(--neon-green);
+        }
+
+        .nav-system {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            color: var(--text-secondary);
+            padding: 14px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            color: #000;
+            background: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+            font-weight: 900;
+        }
+
+        /* شاشة العرض الرئيسية الجبارة */
+        .main-display {
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            animation: pulse-in 0.4s ease-out forwards;
+        }
+
+        .tab-content.active-tab {
+            display: block;
+        }
+
+        /* منصة البيانات المتقدمة العلوية */
+        .analytics-ribbon {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-glow);
+            padding: 20px;
+            border-radius: 6px;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--neon-cyan);
+        }
+
+        .metric-card.alt::before { background: var(--neon-magenta); }
+
+        .metric-val {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        /* جدار المشاريع الخارق */
+        .matrix-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .cyber-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 30px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+        }
+
+        .cyber-card:hover {
+            border-color: var(--neon-magenta);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(255, 0, 127, 0.15);
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            font-size: 11px;
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--neon-cyan);
+            padding: 3px 8px;
+            border-radius: 3px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        /* نافذة الشراء والمحاكاة الجانبية الفاخرة */
+        .checkout-slider {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(161, 0, 255, 0.08) 0%, transparent 50%),
-                        radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 50%);
-            z-index: -1;
-            animation: rotateBg 20s infinite linear;
+            top: 0;
+            left: -100%;
+            width: 480px;
+            height: 100%;
+            background: rgba(5, 10, 25, 0.98);
+            border-right: 2px solid var(--neon-magenta);
+            z-index: 100;
+            transition: left 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            padding: 40px;
+            box-shadow: 20px 0 50px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .checkout-slider.open {
+            left: 0;
+        }
+
+        .glass-form {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--neon-cyan);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px;
+            color: #fff;
+            font-family: monospace;
+            border-radius: 6px;
+        }
+
+        .form-input:focus {
+            border-color: var(--neon-magenta);
+            outline: none;
+        }
+
+        .action-gate {
+            background: var(--neon-magenta);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 6px;
+            text-shadow: 0 0 5px #000;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+
+        .close-slider {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @keyframes pulse-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* توافق الأجهزة (التابلت والموبايل) */
+        @media (max-width: 992px) {
+            .cyber-grid { grid-template-columns: 1fr; }
+            .sidebar { display: none; } /* الأجهزة المحمولة تحصل على عرض الكور الكامل مباشرة */
+            .checkout-slider { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cyber-grid">
+        
+        <!-- وحدة التحكم الجانبية للنظام -->
+        <aside class="sidebar">
+            <div class="identity-core">
+                <div class="avatar-frame">⚡</div>
+                <h2>HA_SHEM</h2>
+                <span>NEXUS ARCHITECT // ONLINE</span>
+            </div>
+
+            <nav class="nav-system">
+                <button class="nav-btn active" onclick="switchTab('core')">/01_النظام_الرئيسي</button>
+                <button class="nav-btn" onclick="switchTab('arsenal')">/02_ترسانة_المشاريع</button>
+                <button class="nav-btn" onclick="switchTab('terminal')">/03_أكاديمية_الـ5_سنوات</button>
+            </nav>
+
+            <div style="font-size: 10px; color: var(--text-secondary); text-align: center;">
+                SECURE CONSOLE v4.02<br>© 2026 GENERAL CORE
+            </div>
+        </aside>
+
+        <!-- نافذة العرض والمحتوى التفاعلي المتقدم -->
+        <main class="main-display">
+
+            <!-- شريط البيانات الرقمية الحية المتغير تلقائياً -->
+            <div class="analytics-ribbon">
+                <div class="metric-card">
+                    <div class="metric-val" id="count1">0</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">إجمالي السطور البرمجية النشطة</div>
+                </div>
+                <div class="metric-card alt">
+                    <div class="metric-val" id="count2">0</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">ساعات محاكاة الخوادم البيئية</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-val">100%</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);">معدل حماية وتشفير البيانات المالية</div>
+                </div>
+            </div>
+
+            <!-- TAB 1: النظام الرئيسي -->
+            <div id="core" class="tab-content active-tab">
+                <h1 style="font-size: 2.5rem; margin: 0 0 20px 0; color: #fff;">محطة التحكم // <span style="color: var(--neon-cyan);">هاشم</span></h1>
+                <p style="color: var(--text-secondary); line-height: 1.8; max-width: 800px; font-size: 15px;">
+                    مرحباً بك في النواة الصلبة. أنا مهندس ومطور أنظمة رقمية، أعمل على تطويع الأكواد البرمجية وهيكلتها لبناء بيئات لعب مخصصة، خوادم محادثة مجهزة بأعلى مستويات الحماية البرمجية الصارمة، وهندسة واجهات معقدة تكسر النمط التقليدي المستهلك.
+                </p>
+                
+                <div style="margin-top: 40px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                    <span style="color: var(--neon-green);">[SYSTEM_STATUS]:</span> جاري تشغيل وحدات المعالجة.. كافة الأنظمة والاشتراكات آمنة ومحمية بمعايير حظر ومنع تعقب التابع لـ $PCI-DSS$.
+                </div>
+            </div>
+
+            <!-- TAB 2: ترسانة المشاريع الهائلة -->
+            <div id="arsenal" class="tab-content">
+                <h2 style="color: #fff; margin-bottom: 30px;">// جدار الترسانة والمشاريع المكتملة</h2>
+                <div class="matrix-wall">
+                    
+                    <div class="cyber-card">
+                        <h3 style="margin: 0 0 10px 0; color: var(--neon-cyan);">01/ محاكي الألعاب والفيزياء الحركية</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6;">بناء بيئات ومحاكاة ثلاثية الأبعاد تفاعلية، تتعامل مباشرة مع ميكانيكيات التصادم، الجاذبية المخصصة وحساب مخرجات الإحداثيات الرأسية.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Luau</span><span class="tag">WebGL</span><span class="tag">Vector Math</span>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3 style="margin: 0 0 10px 0; color: var(--neon-magenta);">02/ خوادم الإمبراطورية الضخمة الفاخرة</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6;">هندسة وتصميم خوادم مجتمعية ذات طابع ملكي خاص (أسود ملوكي مطعم بالذهب البصري)، تدعم توزيع الأذونات التلقائي والأتمتة الكاملة.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Discord Architecture</span><span class="tag">Security API</span>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3 style="margin: 0 0 10px 0; color: var(--neon-green);">03/ أنظمة العملات والمتاجر البرمجية</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6;">تطوير سكربتات وبوتات متكاملة لإدارة الاقتصاد الافتراضي، لوحات المتصدرين، وتتبع نقاط الخبرة للتهيئة التنافسية الكبرى.</p>
+                        <div class="tech-tags">
+                            <span class="tag">Python</span><span class="tag">NodeJS</span><span class="tag">Database</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 3: المتجر والبوابات والفيزا المتقدمة -->
+            <div id="terminal" class="tab-content">
+                <h2 style="color: #fff; margin-bottom: 10px;">// أكاديمية نقل الخبرات الاحترافية</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 14px;">امتلك تصريح وصول كامل، ومستمر، ومحدث شهرياً للغة والبيئة التي تختارها **ولمدة 5 سنوات متواصلة** بسعر رمزي ثابت.</p>
+                
+                <div class="matrix-wall">
+                    <div class="cyber-card" style="border-top: 3px solid var(--neon-cyan);">
+                        <h3 style="color: #fff; margin: 0;">منصة احتراف الـ Luau / Roblox</h3>
+                        <div style="font-size: 1.8rem; font-weight: bold; margin: 15px 0; color: var(--neon-green);">$10 <span style="font-size: 12px; color: var(--text-secondary);">/ شهرياً</span></div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">تتضمن الدورة: كتابة السكربتات المتقدمة، معالجة البيانات السحابية للألعاب، وحماية خادمك من الاختراق الثنائي.</p>
+                        <button class="action-gate" style="margin-top: 20px; background: var(--neon-cyan);" onclick="openGate('Luau / Roblox')">تفعيل البوابة الآمنة 💳</button>
+                    </div>
+
+                    <div class="cyber-card" style="border-top: 3px solid var(--neon-magenta);">
+                        <h3 style="color: #fff; margin: 0;">أكاديمية الـ Python والهندسة العكسية</h3>
+                        <div style="font-size: 1.8rem; font-weight: bold; margin: 15px 0; color: var(--neon-green);">$10 <span style="font-size: 12px; color: var(--text-secondary);">/ شهرياً</span></div>
+                        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">تتضمن الدورة: الأتمتة الشاملة، معالجة ملفات النظم الذاتية، وبناء بوتات التحكم والربط الشبكي المتكامل.</p>
+                        <button class="action-gate" style="margin-top: 20px;" onclick="openGate('Python Automation')">تفعيل البوابة الآمنة 💳</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- نافذة تأكيد الاشتراك ونموذج التشفير المالي المتطور والآمن جيت هابياً -->
+    <div class="checkout-slider" id="checkoutGate">
+        <button class="close-slider" onclick="closeGate()">×</button>
+        <div>
+            <h2 style="color: #fff; margin: 0 0 10px 0;" id="courseTitle">// وحدة الدفع المالي</h2>
+            <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.5;">لقد اخترت مسار الـ 5 سنوات البرمجي الاحترافي. القيمة الاستثمارية المقدرة هي **10$ شهرياً** مخصومة ومشفرة بالكامل.</p>
+            
+            <div class="glass-form">
+                <div class="form-group">
+                    <label>الاسم الكامل لحامل البطاقة</label>
+                    <input type="text" class="form-input" placeholder="HASHEM DEVELOPMENT">
+                </div>
+                <div class="form-group">
+                    <label>رقم بطاقة الفيزا (VISA / MASTERCARD)</label>
+                    <input type="text" class="form-input" placeholder="4000 1234 5678 9010" maxlength="19" id="cardNum">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>تاريخ الانتهاء MM/YY</label>
+                        <input type="text" class="form-input" placeholder="12/29" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label>الرمز السري (CVV)</label>
+                        <input type="password" class="form-input" placeholder="***" maxlength="3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="action-gate" onclick="executeSecureMockPayment()">قفل ومعالجة التشفير الآمن للمطوّر 🔓</button>
+    </div>
+
+    <script>
+        // نظام التبديل الديناميكي الاحترافي والمستقل للأقسام (Tabs)
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active-tab');
+            event.currentTarget.classList.add('active');
+        }
+
+        // محاكي عدادات الأرقام والبيانات عند التحميل الفوري للموقع لتعطي طابعاً احترافياً حياً
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        window.onload = function() {
+            animateValue(document.getElementById("count1"), 0, 742090, 2000);
+            animateValue(document.getElementById("count2"), 0, 1840, 2000);
+        };
+
+        // دالات فتح وإغلاق معالج ومحاكي الفيزا المالي الجانبي
+        function openGate(courseName) {
+            document.getElementById("courseTitle").innerText = "// بوابة دفع مسار: " + courseName;
+            document.getElementById("checkoutGate").classList.add("open");
+        }
+
+        function closeGate() {
+            document.getElementById("checkoutGate").classList.remove("open");
+        }
+
+        // دالة المحاكاة المتقدمة: تشفير البيانات مالياً ووهمياً ليتعلم الزائر كيف تعمل الأنظمة الكبيرة
+        function executeSecureMockPayment() {
+            const cardInput = document.getElementById("cardNum").value;
+            if(cardInput.length < 12) {
+                alert("🔴 خطأ في بروتوكول البطاقة: يرجى إدخال بيانات فيزا صحيحة للفحص الحركي.");
+                return;
+            }
+            alert("🔒 بروتوكول التشفير المالي نشط:\nتم تشفير مدخلات الفيزا بنظام الـ SHA-256 وحزم البيانات مستعدة للإرسال لبوابة الدفع الحقيقية!");
+            closeGate();
+        }
+    </script>
+</body>
+</html>
         }
 
         /* الجزء العلوي (الهيدر) */
