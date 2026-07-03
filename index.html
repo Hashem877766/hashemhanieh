@@ -3,37 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HASHEM // ARCHITECT CORE</title>
+    <title>مواقيت الصلاة والأذكار الحية</title>
     <style>
         :root {
-            --dark-core: #030712;
-            --panel-bg: rgba(17, 24, 39, 0.7);
-            --neon-cyan: #00f2ff;
-            --neon-magenta: #ff007f;
-            --neon-green: #39ff14;
-            --border-glow: rgba(0, 242, 255, 0.15);
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
-        }
-
-        * {
-            box-sizing: border-box;
-            user-select: none;
+            --bg-color: #0d1b2a;
+            --card-bg: #1b263b;
+            --accent-color: #e0a96d;
+            --text-color: #e0e1dd;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
-            background-color: var(--dark-core);
-            color: var(--text-primary);
-            font-family: 'Courier New', Courier, monospace, 'Segoe UI', Tahoma;
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
 
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .location {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .noti-btn {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .noti-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .countdown-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            border: 1px solid rgba(224, 169, 109, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .next-prayer-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            font-variant-numeric: tabular-nums;
+            margin: 15px 0;
+        }
+
+        .dhikr-card {
+            background-color: #14213d;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-style: italic;
+            font-size: 1.1rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prayers-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .prayer-item {
+            background-color: var(--card-bg);
+            padding: 15px 10px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .prayer-item.active {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .prayer-name {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .prayer-time {
+            color: var(--accent-color);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>مواقيت الصلاة والأذكار الشاشية</h1>
+        <div class="location" id="location">جاري تحديد الموقع...</div>
+        
+        <button class="noti-btn" id="enable-noti-btn" onclick="requestNotificationPermission()">تفعيل الإشعارات على الشاشة 🔔</button>
+
+        <div class="countdown-card">
+            <div class="next-prayer-title" id="next-prayer-name">الصلاة القادمة</div>
+            <div class="timer" id="countdown-timer">00:00:00</div>
+            <div id="prayer-time-exact">--:--</div>
+        </div>
+
+        <div class="dhikr-card" id="dhikr-display">جاري تحميل الذكر...</div>
+
+        <div class="prayers-list" id="prayers-board">
+            <div class="prayer-item" id="fajr-card"><span class="prayer-name">الفجر</span><span class="prayer-time" id="Fajr">--:--</span></div>
+            <div class="prayer-item" id="dhuhr-card"><span class="prayer-name">الظهر</span><span class="prayer-time" id="Dhuhr">--:--</span></div>
+            <div class="prayer-item" id="asr-card"><span class="prayer-name">العصر</span><span class="prayer-time" id="Asr">--:--</span></div>
+            <div class="prayer-item" id="maghrib-card"><span class="prayer-name">المغرب</span><span class="prayer-time" id="Maghrib">--:--</span></div>
+            <div class="prayer-item" id="isha-card"><span class="prayer-name">العشاء</span><span class="prayer-time" id="Isha">--:--</span></div>
+        </div>
+    </div>
+
+    <script>
+        const prayerNamesAr = { Fajr: "الفجر", Dhuhr: "الظهر", Asr: "العصر", Maghrib: "المغرب", Isha: "العشاء" };
+        let prayerTimesToday = {};
+        let notifiedPrayers = {}; 
+
+        // قائمة الأذكار التي ستظهر في الإشعارات وعلى الشاشة
+        const dhikrs = [
+            "سبحان الله وبحمده، سبحان الله العظيم",
+            "لا حول ولا قوة إلا بالله العلي العظيم",
+            "أستغفر الله العظيم وأتوب إليه",
+            "اللهم صلِّ وسلم وبارك على نبينا محمد",
+            "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير",
+            "الحمد لله حمداً كثيراً طيباً مباركاً فيه",
+            "اللهم أعني على ذكرك وشكرك وحسن عبادتك",
+            "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر"
+        ];
+
+        // 1. طلب إذن الإشعارات
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert("متصفحك لا يدعم الإشعارات.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    document.getElementById('enable-noti-btn').style.display = 'none';
+                    new Notification("تم تفعيل الإشعارات بنجاح! 🎉", { 
+                        body: "ستصلك إشعارات الأذان وإشعارات الأذكار الدورية على شاشتك." 
+                    });
+                    // تشغيل أول إشعار ذكر فوراً عند الموافقة ليتأكد المستخدم
+                    sendDhikrNotification();
+                }
+            });
+        }
+
+        if (Notification.permission === "granted") {
+            document.getElementById('enable-noti-btn').style.display = 'none';
+        }
+
+        // 2. تحديث الذكر المكتوب داخل الصفحة وتغييره
+        function changePageDhikr() {
+            const randomIndex = Math.floor(Math.random() * dhikrs.length);
+            document.getElementById('dhikr-display').innerText = dhikrs[randomIndex];
+        }
+        changePageDhikr();
+        setInterval(changePageDhikr, 30000); // تغيير النص داخل الصفحة كل 30 ثانية
+
+        // 3. وظيفة إرسال "ذكر" كإشعار منبثق على الشاشة
+        function sendDhikrNotification() {
+            if (Notification.permission === "granted") {
+                const randomIndex = Math.floor(Math.random() * dhikrs.length);
+                new Notification("⏳ ذكرى اليوم", {
+                    body: dhikrs[randomIndex],
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2913/2913524.png'
+                });
+            }
+        }
+
+        // إرسال إشعار ذكر على الشاشة كل 5 دقائق
+        // (5 دقائق = 5 * 60 * 1000 = 300000 مللي ثانية)
+        // إذا كنت تريدها كل ساعة غير الرقم لـ 3600000
+        setInterval(sendDhikrNotification, 300000); 
+
+        // 4. جلب الأوقات من الـ API
+        function getPrayerTimes() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    document.getElementById('location').innerText = `تم تحديد موقعك التلقائي`;
+
+                    fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`)
+                        .then(res => res.json())
+                        .then(data => setupTimings(data.data.timings));
+                }, error => {
+                    document.getElementById('location').innerText = "تم الاعتماد على الموقع الافتراضي (عمان)";
+                    fetch(`https://api.aladhan.com/v1/timingsByCity?city=Amman&country=Jordan&method=4`)
+                        .then(res => res.json())
+                        .then(data => setupTimings(data.data.timings));
+                });
+            }
+        }
+
+        function setupTimings(timings) {
+            prayerTimesToday = { Fajr: timings.Fajr, Dhuhr: timings.Dhuhr, Asr: timings.Asr, Maghrib: timings.Maghrib, Isha: timings.Isha };
+            for (let prayer in prayerTimesToday) {
+                document.getElementById(prayer).innerText = format12Hour(prayerTimesToday[prayer]);
+            }
+            startCountdown();
+        }
+
+        function format12Hour(timeStr) {
+            let [hours, minutes] = timeStr.split(':');
+            hours = parseInt(hours);
+            let ampm = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        // 5. محرك العداد وإشعارات الأذان بالثانية
+        function startCountdown() {
+            setInterval(() => {
+                const now = new Date();
+                let nextPrayer = null;
+                let nextPrayerTime = null;
+
+                for (let prayer in prayerTimesToday) {
+                    const [hours, minutes] = prayerTimesToday[prayer].split(':');
+                    const prayerDate = new Date();
+                    prayerDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+                    // إذا تطابق الوقت بالثانية 00 يرسل إشعار الأذان
+                    if (now.getHours() === parseInt(hours) && now.getMinutes() === parseInt(minutes) && now.getSeconds() === 0) {
+                        sendPrayerNotification(prayer);
+                    }
+
+                    if (prayerDate > now) {
+                        nextPrayer = prayer;
+                        nextPrayerTime = prayerDate;
+                        break;
+                    }
+                }
+
+                if (!nextPrayer) {
+                    nextPrayer = "Fajr";
+                    const [hours, minutes] = prayerTimesToday.Fajr.split(':');
+                    nextPrayerTime = new Date();
+                    nextPrayerTime.setDate(nextPrayerTime.getDate() + 1);
+                    nextPrayerTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                }
+
+                const diff = nextPrayerTime - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('next-prayer-name').innerText = `المتبقي لصلاة ${prayerNamesAr[nextPrayer]}`;
+                document.getElementById('countdown-timer').innerText = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                document.getElementById('prayer-time-exact').innerText = `موعد الأذان: ${format12Hour(prayerTimesToday[nextPrayer])}`;
+
+                document.querySelectorAll('.prayer-item').forEach(card => card.classList.remove('active'));
+                const activeCard = document.getElementById(`${nextPrayer.toLowerCase()}-card`);
+                if(activeCard) activeCard.classList.add('active');
+
+            }, 1000);
+        }
+
+        function sendPrayerNotification(prayerName) {
+            const nameAr = prayerNamesAr[prayerName];
+            if (Notification.permission === "granted" && !notifiedPrayers[prayerName]) {
+                new Notification(`حان الآن موعد أذان ${nameAr} ✨`, {
+                    body: `الله أكبر، الله أكبر.. دخل وقت صلاة ${nameAr}.`,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/2913/2913524.png'
+                });
+                notifiedPrayers[prayerName] = true;
+                setTimeout(() => { notifiedPrayers[prayerName] = false; }, 60000);
+            }
+        }
+
+        getPrayerTimes();
+    </script>
+</body>
+</html>
         /* الإطار الخارجي والشبكة الرقمية للموقع */
         .cyber-grid {
             display: grid;
